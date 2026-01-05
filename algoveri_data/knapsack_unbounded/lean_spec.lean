@@ -1,4 +1,4 @@
-import Mathlib
+namespace KnapsackUnbounded
 
 /-! ### Precondition definitions -/
 
@@ -6,9 +6,9 @@ def solve_knapsack_unbounded_precond (weights values : List Nat) (capacity : Nat
   (weights.length = values.length) ∧
   (weights.length > 0) ∧
   (capacity ≤ 1000) ∧
-  (∀ i, i < weights.length → weights.getD i 0 > 0) ∧
-  (∀ i, i < weights.length → weights.getD i 0 ≤ 1000) ∧
-  (∀ i, i < values.length → values.getD i 0 ≤ 1000)
+  (∀ (i : Nat) (hi : i < weights.length), weights[i] > 0) ∧
+  (∀ (i : Nat) (hi : i < weights.length), weights[i] ≤ 1000) ∧
+  (∀ (i : Nat) (hi : i < values.length), values[i] ≤ 1000)
 
 /-! ### Auxiliary definitions for the post‑condition -/
 
@@ -23,7 +23,7 @@ def total_value (counts values : List Int) : Int :=
 
 def is_valid_strategy (counts weights : List Int) (capacity : Int) : Prop :=
   counts.length = weights.length ∧
-  (∀ i, i < counts.length → counts.getD i 0 ≥ 0) ∧
+  (∀ (i : Nat) (h : i < counts.length), counts[i] ≥ 0) ∧
   total_weight counts weights ≤ capacity
 
 -- !benchmark @start auxcode
@@ -64,4 +64,6 @@ theorem solve_knapsack_unbounded_postcond_satisfied
       h_precond := by
   -- !benchmark @start proof
   sorry
+
+end KnapsackUnbounded
   -- !benchmark @end proof

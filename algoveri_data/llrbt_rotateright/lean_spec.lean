@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace LlrbtRotateright
+
 inductive Color
 | Red
 | Black
@@ -59,6 +62,7 @@ def is_not_empty (t : Node) : Prop :=
 @[reducible, simp]
 def rotate_right_precond (t : Node) : Prop :=
   -- !benchmark @start precond
+  is_bst t ∧
   match t with
   | Node.Tree _ _ l _ =>
     -- Strictly match Dafny/Verus: Only require Left child to be Red.
@@ -71,7 +75,7 @@ def rotate_right_precond (t : Node) : Prop :=
 -- !benchmark @end auxcode
 
 -- Main function definition
-def rotate_right (t : Node) 
+def rotate_right (t : Node)
     (h_precond : rotate_right_precond t) : Node :=
   -- !benchmark @start code
   sorry
@@ -82,18 +86,20 @@ def rotate_right (t : Node)
 def rotate_right_postcond (t : Node) (result : Node)
     (_ : rotate_right_precond t) : Prop :=
   -- !benchmark @start postcond
+  -- Structural properties
+  is_bst result ∧
   view result = view t ∧
-  is_bst t → is_bst result ∧
+  -- Colors & Balance
   match result, t with
   | Node.Tree c' _ _ r', Node.Tree c _ _ _ =>
       -- New root color matches old root color
       c' = c ∧
-      -- New right child is Red
+      -- New right child exists and is RED
       (match r' with
        | Node.Tree Color.Red _ _ _ => True
        | _ => False) ∧
-      -- Black height preservation
-      (black_height t ≠ -1 → black_height result = black_height t)
+      -- Black height preservation (critical proof)
+      black_height result = black_height t
   | _, _ => False
   -- !benchmark @end postcond
 
@@ -106,4 +112,6 @@ theorem rotate_right_postcond_satisfied (t : Node)
     rotate_right_postcond t (rotate_right t h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end LlrbtRotateright
   -- !benchmark @end proof

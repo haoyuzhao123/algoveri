@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace TrialDivisionOptimized
+
 @[reducible, simp]
 def check_prime_precond (n : Nat) : Prop :=
   -- !benchmark @start precond
@@ -31,4 +34,6 @@ theorem check_prime_postcond_satisfied (n : Nat) (h_precond : check_prime_precon
     check_prime_postcond n (check_prime n h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end TrialDivisionOptimized
   -- !benchmark @end proof

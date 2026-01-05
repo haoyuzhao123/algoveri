@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace BstSearch
+
 inductive BinarySearchTree : Type
 | Empty : BinarySearchTree
 | Node : Int → BinarySearchTree → BinarySearchTree → BinarySearchTree
@@ -52,4 +55,6 @@ theorem search_postcond_satisfied (t : BinarySearchTree) (v : Int)
     search_postcond t v (search t v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end BstSearch
   -- !benchmark @end proof

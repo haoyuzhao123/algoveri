@@ -1,23 +1,25 @@
 import Mathlib
 
+
+namespace CycleDetection
+
 structure CycleGraph where
   adj : Array (Array Nat)
 
 def CycleGraph.well_formed (g : CycleGraph) : Prop :=
-  ∀ u, u < g.adj.size →
-    ∀ v, v ∈ g.adj.getD u #[] → v < g.adj.size
+  ∀ (u : Nat) (hu : u < g.adj.size),
+    ∀ v, v ∈ g.adj[u] → v < g.adj.size
 
 def CycleGraph.size (g : CycleGraph) : Nat :=
   g.adj.size
 
 def CycleGraph.has_edge (g : CycleGraph) (u v : Nat) : Prop :=
-  u < g.adj.size ∧
-  v ∈ g.adj.getD u #[]
+  ∃ (hu : u < g.adj.size), v ∈ g.adj[u]
 
 def CycleGraph.is_path (g : CycleGraph) (p : List Nat) : Prop :=
   p.length > 0 ∧
-  ∀ i, i + 1 < p.length →
-    g.has_edge (p.getD i 0) (p.getD (i + 1) 0)
+  ∀ (i : Nat) (hi : i + 1 < p.length),
+    g.has_edge (p[i]) (p[i + 1])
 
 def CycleGraph.is_cycle (g : CycleGraph) (p : List Nat) : Prop :=
   g.is_path p ∧ p.length > 1 ∧ p.head? = p.getLast?
@@ -59,4 +61,6 @@ theorem has_cycle_postcond_satisfied (graph : CycleGraph)
     has_cycle_postcond graph (has_cycle graph h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end CycleDetection
   -- !benchmark @end proof

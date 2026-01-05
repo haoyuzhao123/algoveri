@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace SplaytreeSplay
+
 inductive SplayTree
 | empty
 | node (val : Int) (left right : SplayTree)
@@ -70,3 +73,5 @@ theorem splay_postcond_satisfied (t : SplayTree) (v : Int)
   -- !benchmark @end proof
 
 end SplayTree
+
+end SplaytreeSplay

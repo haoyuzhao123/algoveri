@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace jump_game
+
 -- Precondition definition
 @[reducible, simp]
 def can_jump_precond (nums : List Nat) : Prop :=
@@ -44,3 +46,5 @@ theorem can_jump_postcond_satisfied (nums : List Nat) (h_precond : can_jump_prec
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end jump_game

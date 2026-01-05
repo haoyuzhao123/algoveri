@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace polymul_karatsuba
+
 -- Precondition definitions
 @[reducible, simp]
 def karatsuba_mul_precond (a b : List Int) : Prop :=
@@ -48,3 +50,5 @@ theorem karatsuba_mul_postcond_satisfied (a b : List Int) (h_precond : karatsuba
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end polymul_karatsuba

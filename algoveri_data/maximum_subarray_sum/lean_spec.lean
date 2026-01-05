@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace MaximumSubarraySum
+
 @[reducible, simp]
 def maxSubarraySum_precond (seq : List Int) : Prop :=
   -- !benchmark @start precond
@@ -36,4 +39,6 @@ theorem maxSubarraySum_postcond_satisfied (seq: List Int) (h_precond : maxSubarr
     maxSubarraySum_postcond (seq) (maxSubarraySum (seq) h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end MaximumSubarraySum
   -- !benchmark @end proof

@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace SegmenttreeModify
+
 inductive Node
 | mk (val : Int) (low high : Int) (left right : Option Node)
 deriving Inhabited
@@ -96,4 +99,6 @@ theorem modify_postcond_satisfied (node : Node) (idx : Int) (v : Int)
     modify_postcond node idx v (updateTree node idx v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end SegmenttreeModify
   -- !benchmark @end proof

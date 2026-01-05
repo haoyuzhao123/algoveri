@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace RingbufferEnqueue
+
 structure RingBuffer (T : Type) where
   capacity : Nat
   view : List T
@@ -44,4 +47,6 @@ theorem enqueue_postcond_satisfied {T} (rb : RingBuffer T) (v : T)
     enqueue_postcond rb v (enqueue rb v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end RingbufferEnqueue
   -- !benchmark @end proof

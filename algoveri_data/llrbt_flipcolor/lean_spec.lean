@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace LlrbtFlipcolor
+
 inductive Color
 | Red
 | Black
@@ -126,4 +129,6 @@ theorem flip_colors_postcond_satisfied (t : Node)
     flip_colors_postcond t (flip_colors t h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end LlrbtFlipcolor
   -- !benchmark @end proof

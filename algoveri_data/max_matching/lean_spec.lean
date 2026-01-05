@@ -1,18 +1,22 @@
 import Mathlib
 
+
+namespace MaxMatching
+
 structure MaxMatchingGraph where
   left_size : Nat
   right_size : Nat
   adj : Array (Array Nat)
 
 def MaxMatchingGraph.well_formed (g : MaxMatchingGraph) : Prop :=
-  g.adj.size = g.left_size ∧
-  ∀ u, u < g.left_size →
-    ∀ v, v ∈ g.adj.getD u #[] → v < g.right_size
+  (∃ (h : g.adj.size = g.left_size),
+  ∀ (u : Nat) (hu : u < g.left_size),
+    ∀ v, v ∈ g.adj[u] → v < g.right_size)
 
 def MaxMatchingGraph.has_edge (g : MaxMatchingGraph) (u v : Nat) : Prop :=
-  u < g.left_size ∧
-  v ∈ g.adj.getD u #[]
+  (∃ (hu : u < g.left_size)
+  (h_adj : g.adj.size = g.left_size),
+  v ∈ g.adj[u])
 
 -- Matching definition
 structure Matching where
@@ -29,7 +33,7 @@ def Matching.size (m : Matching) : Nat :=
   m.edges.length
 
 def is_matching (g : MaxMatchingGraph) (m : Matching) : Prop :=
-  m.is_valid g ∧ 
+  m.is_valid g ∧
   m.is_disjoint ∧
   m.edges.Nodup
 
@@ -72,4 +76,6 @@ theorem max_bipartite_matching_postcond_satisfied (graph : MaxMatchingGraph)
       (max_bipartite_matching graph h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end MaxMatching
   -- !benchmark @end proof

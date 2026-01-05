@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace QuickSort
+
 @[reducible, simp]
 def quickSort_precond (v : List Int) : Prop :=
   -- !benchmark @start precond
@@ -31,4 +34,6 @@ theorem quickSort_postcond_satisfied (v : List Int) (h_precond : quickSort_preco
     quickSort_postcond v (quickSort v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end QuickSort
   -- !benchmark @end proof

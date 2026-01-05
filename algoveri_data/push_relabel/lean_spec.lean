@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace push_relabel
+
 structure CapacityGraph where
   adj : Array (Array (Nat × Int))
 
@@ -101,3 +103,5 @@ theorem max_flow_value_postcond_satisfied (graph : CapacityGraph) (s t : Nat)
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end push_relabel

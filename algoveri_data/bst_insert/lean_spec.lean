@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace BstInsert
+
 inductive BinarySearchTree : Type
 | Empty : BinarySearchTree
 | Node : Int → BinarySearchTree → BinarySearchTree → BinarySearchTree
@@ -53,4 +56,6 @@ theorem insert_postcond_satisfied (t : BinarySearchTree) (v : Int)
     insert_postcond t v (insert t v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end BstInsert
   -- !benchmark @end proof

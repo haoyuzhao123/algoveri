@@ -1,10 +1,12 @@
 import Mathlib
 
+namespace StringSearchNaive
+
 -- Precondition definitions
 @[reducible, simp]
 def naive_search_precond (haystack : Array UInt8) (needle : Array UInt8) : Prop :=
   -- !benchmark @start precond
-  haystack.size < 1000000 ∧ 
+  haystack.size < 1000000 ∧
   needle.size < 1000000
   -- !benchmark @end precond
 
@@ -20,16 +22,17 @@ def naive_search (haystack : Array UInt8) (needle : Array UInt8)
 
 -- Postcondition auxiliary definitions
 def matches_at (haystack needle : Array UInt8) (i : Nat) : Prop :=
-  i + needle.size ≤ haystack.size ∧
-  (∀ j, j < needle.size → haystack.getD (i + j) 0 = needle.getD j 0)
+  ∃ (h : i + needle.size ≤ haystack.size),
+    ∀ (j : Nat) (hj : j < needle.size),
+      haystack[i + j] = needle[j]
 
 -- Postcondition definitions
 @[reducible, simp]
 def naive_search_postcond (haystack : Array UInt8) (needle : Array UInt8)
     (result : Array Nat) (_ : naive_search_precond haystack needle) : Prop :=
   -- !benchmark @start postcond
-  (∀ i, i < result.size → matches_at haystack needle (result.getD i 0)) ∧
-  (∀ i, matches_at haystack needle i → ∃ k, k < result.size ∧ result.getD k 0 = i)
+  (∀ (i : Nat) (hi : i < result.size), matches_at haystack needle (result[i])) ∧
+  (∀ i, matches_at haystack needle i → ∃ (k : Nat) (hk : k < result.size), result[k] = i)
   -- !benchmark @end postcond
 
 -- !benchmark @start lemma
@@ -42,3 +45,5 @@ theorem naive_search_postcond_satisfied (haystack : Array UInt8) (needle : Array
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end StringSearchNaive

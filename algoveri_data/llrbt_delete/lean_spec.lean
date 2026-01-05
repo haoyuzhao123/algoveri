@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace LlrbtDelete
+
 inductive Color
 | Red
 | Black
@@ -95,4 +98,6 @@ theorem delete_postcond_satisfied (t : Node) (v : Int)
     delete_postcond t v (delete t v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end LlrbtDelete
   -- !benchmark @end proof

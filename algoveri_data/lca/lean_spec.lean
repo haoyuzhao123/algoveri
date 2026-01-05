@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace Lca
+
 inductive Node where
   | nil
   | node (val : Nat) (left : Node) (right : Node)
@@ -102,4 +105,6 @@ theorem lowest_common_ancestor_postcond_satisfied (root : Node) (p q : Nat)
     lowest_common_ancestor_postcond root p q (lowest_common_ancestor root p q h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end Lca
   -- !benchmark @end proof

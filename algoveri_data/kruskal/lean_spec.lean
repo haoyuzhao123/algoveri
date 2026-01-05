@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace Kruskal
+
 structure WeightedGraph where
   adj : Array (Array (Nat × Int))
 
@@ -7,15 +10,15 @@ def WeightedGraph.size (g : WeightedGraph) : Nat :=
   g.adj.size
 
 def WeightedGraph.has_edge (g : WeightedGraph) (u v : Nat) (w : Int) : Prop :=
-  u < g.size ∧
-  ∃ pair, pair ∈ g.adj.getD u #[] ∧ pair.1 = v ∧ pair.2 = w
+  (∃ (hu : u < g.size),
+  ∃ pair, pair ∈ g.adj[u] ∧ pair.1 = v ∧ pair.2 = w)
 
 def WeightedGraph.well_formed (g : WeightedGraph) : Prop :=
-  ∀ u, u < g.size →
+  ∀ (u : Nat) (hu : u < g.size),
     -- Bounds check
-    (∀ pair, pair ∈ g.adj.getD u #[] → pair.1 < g.size) ∧
+    (∀ pair, pair ∈ g.adj[u] → pair.1 < g.size) ∧
     -- Simple graph check (matches Dafny)
-    (∀ p1 p2, p1 ∈ g.adj.getD u #[] → p2 ∈ g.adj.getD u #[] → p1.1 = p2.1 → p1 = p2)
+    (∀ p1 p2, p1 ∈ g.adj[u] → p2 ∈ g.adj[u] → p1.1 = p2.1 → p1 = p2)
 
 structure MSTEdge where
   u : Nat
@@ -33,8 +36,8 @@ def edges_contain (edges : List MSTEdge) (u v : Nat) : Prop :=
 
 def path_follows_edges (edges : List MSTEdge) (p : List Nat) : Prop :=
   p.length > 0 ∧
-  ∀ i, i + 1 < p.length →
-    edges_contain edges (p.getD i 0) (p.getD (i + 1) 0)
+  ∀ (i : Nat) (hi : i + 1 < p.length),
+    edges_contain edges (p[i]) (p[i + 1])
 
 def is_connected_with_edges (g : WeightedGraph) (edges : List MSTEdge) : Prop :=
   ∀ u v, u < g.size → v < g.size →
@@ -59,8 +62,8 @@ def is_mst (g : WeightedGraph) (edges : List MSTEdge) : Prop :=
 -- Dafny uses directed edges for the graph path check: `graph_has_any_edge`
 def path_follows_graph (g : WeightedGraph) (p : List Nat) : Prop :=
   p.length > 0 ∧
-  ∀ i, i + 1 < p.length →
-    ∃ w, g.has_edge (p.getD i 0) (p.getD (i + 1) 0) w
+  ∀ (i : Nat) (hi : i + 1 < p.length),
+    ∃ w, g.has_edge (p[i]) (p[i + 1]) w
 
 def WeightedGraph.is_connected (g : WeightedGraph) : Prop :=
   ∀ u v, u < g.size → v < g.size →
@@ -107,4 +110,6 @@ theorem kruskal_mst_postcond_satisfied (graph : WeightedGraph)
     kruskal_mst_postcond graph (kruskal_mst graph h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end Kruskal
   -- !benchmark @end proof

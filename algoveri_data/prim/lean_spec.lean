@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace prim
+
 structure WeightedGraph where
   adj : Array (Array (Nat × Int))
 
@@ -108,3 +110,5 @@ theorem prim_mst_postcond_satisfied (graph : WeightedGraph)
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end prim

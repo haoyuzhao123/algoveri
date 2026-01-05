@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace StackPop
+
 structure VerifiableStack (T : Type) where
   data : List T
 
@@ -47,4 +50,6 @@ theorem pop_postcond_satisfied {T} (s : VerifiableStack T)
     pop_postcond s (pop s h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end StackPop
   -- !benchmark @end proof

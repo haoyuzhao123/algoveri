@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace QueueDequeue
+
 structure VerifiableQueue (T : Type) where
   data : List T
 
@@ -47,4 +50,6 @@ theorem dequeue_postcond_satisfied {T} (q : VerifiableQueue T)
     dequeue_postcond q (dequeue q h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end QueueDequeue
   -- !benchmark @end proof

@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace BubbleSort
+
 @[reducible, simp]
 def bubble_sort_precond (v : List Int) : Prop :=
   -- !benchmark @start precond
@@ -31,4 +34,6 @@ theorem bubble_sort_postcond_satisfied (v : List Int) (h_precond : bubble_sort_p
     bubble_sort_postcond v (bubble_sort v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end BubbleSort
   -- !benchmark @end proof

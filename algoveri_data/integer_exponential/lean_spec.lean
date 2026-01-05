@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace IntegerExponential
+
 @[reducible, simp]
 def exponentiation_precond (b e : Nat) : Prop :=
   -- !benchmark @start precond
@@ -32,4 +35,6 @@ theorem exponentiation_postcond_satisfied (b e : Nat)
     exponentiation_postcond b e (exponentiation b e h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end IntegerExponential
   -- !benchmark @end proof

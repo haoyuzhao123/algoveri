@@ -1,23 +1,23 @@
-import Mathlib
+namespace Bfs
 
 structure BFSGraph where
   adj : Array (Array Nat)
 
 def BFSGraph.well_formed (g : BFSGraph) : Prop :=
-  ∀ u, u < g.adj.size →
-    ∀ v, v ∈ g.adj.getD u #[] → v < g.adj.size
+  ∀ (u : Nat) (hu : u < g.adj.size),
+    ∀ v, v ∈ g.adj[u] → v < g.adj.size
 
 def BFSGraph.size (g : BFSGraph) : Nat :=
   g.adj.size
 
 def BFSGraph.has_edge (g : BFSGraph) (u v : Nat) : Prop :=
-  u < g.adj.size ∧
-  v ∈ g.adj.getD u #[]
+  ∃ (hu : u < g.adj.size),
+  v ∈ g.adj[u]
 
 def BFSGraph.is_path (g : BFSGraph) (p : List Nat) : Prop :=
   p.length > 0 ∧
-  ∀ i, i + 1 < p.length →
-    g.has_edge (p.getD i 0) (p.getD (i + 1) 0)
+  ∀ (i : Nat) (hi : i + 1 < p.length),
+    g.has_edge (p[i]'(by grind)) (p[i + 1]'(by grind))
 
 def BFSGraph.reachable (g : BFSGraph) (start target : Nat) : Prop :=
   ∃ p, g.is_path p ∧ p.head? = some start ∧ p.getLast? = some target
@@ -63,4 +63,6 @@ theorem bfs_shortest_path_postcond_satisfied (graph : BFSGraph) (start target : 
       (bfs_shortest_path graph start target h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end Bfs
   -- !benchmark @end proof

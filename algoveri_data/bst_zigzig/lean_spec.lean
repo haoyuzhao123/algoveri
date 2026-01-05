@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace BstZigzig
+
 inductive BinarySearchTree : Type
 | Empty : BinarySearchTree
 | Node : Int → BinarySearchTree → BinarySearchTree → BinarySearchTree
@@ -83,4 +86,6 @@ theorem zigzig_postcond_satisfied (t : BinarySearchTree)
     zigzig_postcond t (zigzig t h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end BstZigzig
   -- !benchmark @end proof

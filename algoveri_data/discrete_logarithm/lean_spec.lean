@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace DiscreteLogarithm
+
 @[reducible, simp]
 def discrete_log_naive_precond (g h p : UInt64) : Prop :=
   -- !benchmark @start precond
@@ -37,4 +40,6 @@ theorem discrete_log_naive_postcond_satisfied (g h p : UInt64) (h_precond : disc
     discrete_log_naive_postcond g h p (discrete_log_naive g h p h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end DiscreteLogarithm
   -- !benchmark @end proof

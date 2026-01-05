@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace trie_search
+
 inductive Node
 | mk (is_end : Bool) (children : List (Option Node))
 deriving Inhabited
@@ -15,27 +17,6 @@ def children (t : Node) : List (Option Node) :=
   | Node.mk _ c => c
 
 end Node
-
--- Helper for enum behavior
-def enumerate {α} (l : List α) : List (Nat × α) :=
-  (List.range l.length).zip l
-
--- Using Set theory directly
-def view (t : Node) : Set (List Int) :=
-  let current : Set (List Int) := if t.is_end then {[]} else ∅
-  let child_views : Set (List Int) :=
-    let indexed_children := enumerate t.children
-    indexed_children.foldr (fun (idx_child : Nat × Option Node) acc =>
-      match idx_child.2 with
-      | some child =>
-        let suffix_set := view child
-        let prefixed_set := suffix_set.image (fun suffix => (idx_child.1 : Int) :: suffix)
-        acc ∪ prefixed_set
-      | none => acc
-    ) ∅
-  current ∪ child_views
-termination_by sizeOf t
-decreasing_by sorry
 
 -- Safe list access helper
 def list_get_opt {α} (l : List α) (n : Nat) : Option α :=
@@ -53,14 +34,28 @@ def contains (t : Node) (key : List Int) : Bool :=
       else
         false
 
+-- View as a Set of key sequences (matching Verus/Dafny style)
+def view (t : Node) : Set (List Int) :=
+  {key | contains t key}
+
 def is_empty_node (t : Node) : Bool :=
   !t.is_end ∧ t.children.all Option.isNone
 
 def is_valid_key (key : List Int) : Prop :=
   ∀ k ∈ key, 0 ≤ k ∧ k < 256
 
-def is_valid_key (key : List Int) : Prop :=
-  ∀ k ∈ key, 0 ≤ k ∧ k < 256
+-- Dafny uses an array of size 256. Here we model it as a list of 256 Option Node.
+def well_formed (t : Node) : Prop :=
+  match t with
+  | Node.mk _ children =>
+    children.length = 256 ∧
+    ∀ c ∈ children, match c with
+      | some child =>
+          well_formed child ∧
+          !is_empty_node child -- CRITICAL: Match Dafny's pruning invariant
+      | none => True
+termination_by sizeOf t
+decreasing_by sorry
 
 @[reducible, simp]
 def insert_precond (t : Option Node) (key : List Int) : Prop :=
@@ -115,3 +110,5 @@ theorem search_postcond_satisfied (t : Option Node) (key : List Int)
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end trie_search

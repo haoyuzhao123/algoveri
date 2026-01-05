@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace KSmallest
+
 @[reducible, simp]
 def quick_select_precond (v : Array Int) (k : Nat) : Prop :=
   -- !benchmark @start precond
@@ -20,10 +23,9 @@ def quick_select (v : Array Int) (k : Nat) (h_precond : quick_select_precond v k
 @[reducible, simp]
 def quick_select_postcond (v : Array Int) (k : Nat) (result : Int) (h_precond : quick_select_precond v k) : Prop :=
   -- !benchmark @start postcond
-  ∃ sorted : List Int,
-    sorted.length = v.size ∧
+  ∃ (sorted : List Int) (hsorted : sorted.length = v.size),
     List.Sorted (· ≤ ·) sorted ∧
-    sorted.getD k 0 = result ∧
+    sorted[k]'(by unfold quick_select_precond at h_precond; grind) = result ∧
     sorted.Perm v.toList
   -- !benchmark @end postcond
 
@@ -35,4 +37,6 @@ theorem quick_select_postcond_satisfied (v : Array Int) (k : Nat) (h_precond : q
     quick_select_postcond v k (quick_select v k h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end KSmallest
   -- !benchmark @end proof

@@ -1,23 +1,23 @@
-import Mathlib
+namespace BipartiteCheck
 
 structure BipartiteGraph where
   adj : Array (Array Nat)
 
 def BipartiteGraph.well_formed (g : BipartiteGraph) : Prop :=
-  ∀ u, u < g.adj.size →
-    ∀ v, v ∈ g.adj.getD u #[] → v < g.adj.size
+  ∀ (u : Nat) (hu : u < g.adj.size),
+    ∀ v, v ∈ g.adj[u]'hu → v < g.adj.size
 
 def BipartiteGraph.size (g : BipartiteGraph) : Nat :=
   g.adj.size
 
 def BipartiteGraph.has_edge (g : BipartiteGraph) (u v : Nat) : Prop :=
-  u < g.adj.size ∧
-  v ∈ g.adj.getD u #[]
+  ∃ (hu : u < g.adj.size),
+  v ∈ g.adj[u]'hu
 
 def BipartiteGraph.is_valid_coloring (g : BipartiteGraph) (colors : Array Bool) : Prop :=
   colors.size = g.size ∧
-  ∀ u v, g.has_edge u v →
-    u < colors.size → v < colors.size → colors.getD u false ≠ colors.getD v false
+  ∀ (u v : Nat) (hu : g.has_edge u v) (hcolors : u < colors.size) (hcolorsv : v < colors.size),
+    colors[u]'(by grind) ≠ colors[v]'(by grind)
 
 def BipartiteGraph.is_bipartite (g : BipartiteGraph) : Prop :=
   ∃ colors, g.is_valid_coloring colors
@@ -58,4 +58,6 @@ theorem check_bipartite_postcond_satisfied (graph : BipartiteGraph)
     check_bipartite_postcond graph (check_bipartite graph h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end BipartiteCheck
   -- !benchmark @end proof

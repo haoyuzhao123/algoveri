@@ -1,12 +1,15 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace CoinChange
+
 @[reducible, simp]
 def coin_change_precond (coins : List Nat) (amount : Nat) : Prop :=
   coins.length > 0 ∧
   coins.length ≤ 100 ∧
   amount ≤ 10000 ∧
-  ∀ i, i < coins.length → (coins.getD i 0 > 0 ∧ coins.getD i 0 ≤ 10000)
+  ∀ (i : Nat) (hi : i < coins.length), (coins[i] > 0 ∧ coins[i] ≤ 10000)
 
 -- !benchmark @start auxcode
 -- !benchmark @end auxcode
@@ -32,7 +35,7 @@ def total_coins (counts : List Int) : Int :=
 
 def is_valid_change (counts : List Int) (coins : List Int) (amount : Int) : Prop :=
   counts.length = coins.length ∧
-  (∀ i, i < counts.length → counts.getD i 0 ≥ 0) ∧
+  (∀ (i : Nat) (hi : i < counts.length), counts[i] ≥ 0) ∧
   total_amount counts coins = amount
 
 -- Postcondition definitions
@@ -63,4 +66,6 @@ theorem coin_change_postcond_satisfied (coins : List Nat) (amount : Nat)
     coin_change_postcond coins amount (coin_change coins amount h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end CoinChange
   -- !benchmark @end proof

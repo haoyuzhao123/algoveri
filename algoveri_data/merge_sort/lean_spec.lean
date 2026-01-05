@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace MergeSort
+
 @[reducible, simp]
 def mergeSort_precond (v : List Int) : Prop :=
   -- !benchmark @start precond
@@ -31,4 +34,6 @@ theorem mergeSort_postcond_satisfied (v : List Int) (h_precond : mergeSort_preco
     mergeSort_postcond v (mergeSort v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end MergeSort
   -- !benchmark @end proof

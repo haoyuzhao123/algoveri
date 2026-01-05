@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace maxheap_popmax
+
 structure BinaryMaxHeap where
   storage : List Int
 deriving Inhabited
@@ -62,3 +64,5 @@ theorem pop_max_postcond_satisfied (h : BinaryMaxHeap)
   -- !benchmark @end proof
 
 end BinaryMaxHeap
+
+end maxheap_popmax

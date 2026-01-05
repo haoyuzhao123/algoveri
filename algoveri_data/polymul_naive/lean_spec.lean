@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace PolymulNaive
+
 @[reducible, simp]
 def poly_multiply_precond (a b : List Int) : Prop :=
   -- !benchmark @start precond
@@ -27,12 +30,11 @@ def poly_multiply (a b : List Int) (h_precond : poly_multiply_precond a b) : Lis
 -- Postcondition definitions
 @[reducible, simp]
 def poly_multiply_postcond (a b : List Int) (result : List Int) (h_precond : poly_multiply_precond a b) : Prop :=
-  -- !benchmark @start postcond
   result.length = a.length + b.length - 1 ∧
-  ∀ k : Nat, k < result.length →
-    result.getD k 0 = (List.range (k + 1)).foldl (fun acc i =>
-        if i < a.length ∧ k - i < b.length then
-          acc + a.getD i 0 * b.getD (k - i) 0
+  ∀ (k : Nat) (hk : k < result.length),
+    result[k] = (List.range (k + 1)).foldl (fun acc i =>
+        if h : i < a.length ∧ k - i < b.length then
+          acc + a[i] * b[k - i]
         else acc) 0
   -- !benchmark @end postcond
 
@@ -44,4 +46,6 @@ theorem poly_multiply_postcond_satisfied (a b : List Int) (h_precond : poly_mult
     poly_multiply_postcond a b (poly_multiply a b h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end PolymulNaive
   -- !benchmark @end proof

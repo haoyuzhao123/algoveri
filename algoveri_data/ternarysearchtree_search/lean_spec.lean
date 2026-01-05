@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace TernarysearchtreeSearch
+
 inductive Node
 | mk (val : Int) (is_end : Bool) (left mid right : Option Node)
 deriving Inhabited
@@ -121,4 +124,6 @@ theorem search_postcond_satisfied (t : Option Node) (key : List Int)
     search_postcond t key (search t key h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end TernarysearchtreeSearch
   -- !benchmark @end proof

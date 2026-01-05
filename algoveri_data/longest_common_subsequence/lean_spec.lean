@@ -1,4 +1,4 @@
-import Mathlib
+namespace LongestCommonSubsequence
 
 def lcs_spec (s t : List Char) : Nat :=
   match s, t with
@@ -42,4 +42,6 @@ theorem solve_longest_common_subsequence_postcond_satisfied (s t : List Char)
     solve_longest_common_subsequence_postcond s t (solve_longest_common_subsequence s t h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end LongestCommonSubsequence
   -- !benchmark @end proof

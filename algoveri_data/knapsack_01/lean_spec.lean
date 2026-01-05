@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace Knapsack01
+
 def total_weight (selected : List Bool) (weights : List Nat) : Nat :=
   match selected, weights with
   | [], _ => 0
@@ -20,7 +23,11 @@ def is_valid_strategy (selected : List Bool) (weights : List Nat) (capacity : Na
 @[reducible, simp]
 def knapsack_01_precond (weights values : List Nat) (capacity : Nat) : Prop :=
   -- !benchmark @start precond
-  weights.length = values.length
+  weights.length = values.length ∧
+  weights.length ≤ 100 ∧
+  capacity ≤ 1000 ∧
+  (∀ (i : Nat) (hi : i < weights.length), weights[i] ≤ 1000) ∧
+  (∀ (i : Nat) (hi : i < values.length), values[i] ≤ 1000)
   -- !benchmark @end precond
 
 -- !benchmark @start auxcode
@@ -51,4 +58,6 @@ theorem knapsack_01_postcond_satisfied (weights values : List Nat) (capacity : N
     knapsack_01_postcond weights values capacity (knapsack_01 weights values capacity h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end Knapsack01
   -- !benchmark @end proof

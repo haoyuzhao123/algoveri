@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace scc_tarjan
+
 structure SCCGraph where
   adj : Array (Array Nat)
 
@@ -30,7 +32,7 @@ def SCCGraph.is_strongly_connected (g : SCCGraph) (comp : List Nat) : Prop :=
 
 def SCCGraph.is_partition (g : SCCGraph) (sccs : List (List Nat)) : Prop :=
   -- Enforce no duplicate components to match index-based disjointness
-  sccs.Nodup ∧ 
+  sccs.Nodup ∧
   -- All nodes covered
   (∀ u, u < g.size → ∃ comp, comp ∈ sccs ∧ u ∈ comp) ∧
   -- Disjoint
@@ -84,3 +86,5 @@ theorem find_sccs_postcond_satisfied (graph : SCCGraph)
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end scc_tarjan

@@ -1,10 +1,13 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace LongestIncreasingSubsequence
+
 @[reducible, simp]
 def longest_increasing_subsequence_precond (seq : List Int) : Prop :=
   -- !benchmark @start precond
-  True
+  seq.length ≤ 0x7FFFFFFFFFFFFFFF
   -- !benchmark @end precond
 
 
@@ -24,13 +27,14 @@ def longest_increasing_subsequence (seq : List Int)
 
 /-- `inc_nat l` states that the list `l` of natural numbers is strictly increasing. -/
 def inc_nat (l : List Nat) : Prop :=
-  ∀ i j, i < j → i < l.length → j < l.length → l.getD i 0 < l.getD j 0
+  ∀ (i j : Nat) (hi : i < j) (hj : i < l.length) (hj' : j < l.length), l[i] < l[j]
 
 /-- `inc_vals seq indices` states that the values of `seq` at the given (strictly increasing)
     indices form a strictly increasing sequence. -/
 def inc_vals (seq : List Int) (indices : List Nat) : Prop :=
-  ∀ i j, i < j → i < indices.length → j < indices.length →
-    seq.getD (indices.getD i 0) 0 < seq.getD (indices.getD j 0) 0
+  ∀ (i j : Nat) (hi : i < j) (hj : i < indices.length) (hj' : j < indices.length)
+    (h_bound_i : indices[i] < seq.length) (h_bound_j : indices[j] < seq.length),
+    seq[indices[i]]'(by exact h_bound_i) < seq[indices[j]]'(by exact h_bound_j)
 
 /-- `is_valid_is seq indices` bundles the three necessary conditions for a list of indices
     to represent a valid increasing subsequence of `seq`. -/
@@ -45,7 +49,7 @@ def longest_increasing_subsequence_postcond
     (seq : List Int) (result : Nat)
     (h_precond : longest_increasing_subsequence_precond seq) : Prop :=
   -- !benchmark @start postcond
-  (∀ sub : List Nat, is_valid_is seq sub → sub.length ≤ result) ∧
+  (∀ sub : List Nat, is_valid_is seq sub → sub.length > 0 → sub.length ≤ result) ∧
   (∃ sub : List Nat, is_valid_is seq sub ∧ sub.length = result)
   -- !benchmark @end postcond
 
@@ -59,4 +63,6 @@ theorem longest_increasing_subsequence_postcond_satisfied
       seq (longest_increasing_subsequence seq h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end LongestIncreasingSubsequence
   -- !benchmark @end proof

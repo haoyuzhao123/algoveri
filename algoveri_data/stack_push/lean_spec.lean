@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace StackPush
+
 structure VerifiableStack (T : Type) where
   data : List T
 
@@ -44,4 +47,6 @@ theorem push_postcond_satisfied {T} (s : VerifiableStack T) (v : T)
     push_postcond s v (push s v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end StackPush
   -- !benchmark @end proof

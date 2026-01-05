@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace sieve_method
+
 -- Precondition definitions
 @[reducible, simp]
 def sieve_of_eratosthenes_precond (n : Nat) : Prop :=
@@ -35,3 +37,5 @@ theorem sieve_of_eratosthenes_postcond_satisfied (n : Nat) (h_precond : sieve_of
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end sieve_method

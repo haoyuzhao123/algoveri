@@ -1,23 +1,25 @@
 import Mathlib
 
+
+namespace Dfs
+
 structure DFSGraph where
   adj : Array (Array Nat)
 
 def DFSGraph.well_formed (g : DFSGraph) : Prop :=
-  ∀ u, u < g.adj.size →
-    ∀ v, v ∈ g.adj.getD u #[] → v < g.adj.size
+  ∀ (u : Nat) (hu : u < g.adj.size),
+    ∀ v, v ∈ g.adj[u] → v < g.adj.size
 
 def DFSGraph.size (g : DFSGraph) : Nat :=
   g.adj.size
 
 def DFSGraph.has_edge (g : DFSGraph) (u v : Nat) : Prop :=
-  u < g.adj.size ∧
-  v ∈ g.adj.getD u #[]
+  ∃ (hu : u < g.adj.size), v ∈ g.adj[u]
 
 def DFSGraph.is_path (g : DFSGraph) (p : List Nat) : Prop :=
   p.length > 0 ∧
-  ∀ i, i + 1 < p.length →
-    g.has_edge (p.getD i 0) (p.getD (i + 1) 0)
+  ∀ (i : Nat) (hi : i + 1 < p.length),
+    g.has_edge (p[i]) (p[i + 1])
 
 def DFSGraph.reachable (g : DFSGraph) (start target : Nat) : Prop :=
   ∃ p, g.is_path p ∧ p.head? = some start ∧ p.getLast? = some target
@@ -57,4 +59,6 @@ theorem dfs_check_reachability_postcond_satisfied (graph : DFSGraph) (start targ
       (dfs_check_reachability graph start target h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end Dfs
   -- !benchmark @end proof

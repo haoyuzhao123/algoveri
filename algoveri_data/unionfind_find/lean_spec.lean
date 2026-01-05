@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace unionfind_find
+
 structure UnionFind where
   parent : List Nat
   rank   : List Nat -- Added to match Dafny/Verus
@@ -84,3 +86,5 @@ theorem find_postcond_satisfied (uf : UnionFind) (i : Nat)
   -- !benchmark @end proof
 
 end UnionFind
+
+end unionfind_find

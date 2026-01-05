@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace linearsys_gf2
+
 -- Precondition definitions
 @[reducible, simp]
 def solve_linear_system_gf2_precond (matrix : List (List Nat)) (b : List Nat) : Prop :=
@@ -45,3 +47,5 @@ theorem solve_linear_system_gf2_postcond_satisfied (matrix : List (List Nat)) (b
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end linearsys_gf2

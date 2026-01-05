@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace topological_sort
+
 structure TopoGraph where
   adj : Array (Array Nat)
 
@@ -75,3 +77,5 @@ theorem topological_sort_postcond_satisfied (graph : TopoGraph)
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end topological_sort

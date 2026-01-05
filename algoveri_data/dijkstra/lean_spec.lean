@@ -1,4 +1,6 @@
-import Mathlib
+
+
+namespace Dijkstra
 
 structure WeightedGraph where
   adj : Array (Array (Nat × Int))
@@ -7,15 +9,15 @@ def WeightedGraph.size (g : WeightedGraph) : Nat :=
   g.adj.size
 
 def WeightedGraph.has_edge (g : WeightedGraph) (u v : Nat) (w : Int) : Prop :=
-  u < g.size ∧
-  ∃ pair, pair ∈ g.adj.getD u #[] ∧ pair.1 = v ∧ pair.2 = w
+  ∃ (hu : u < g.size),
+  ∃ pair, pair ∈ g.adj[u] ∧ pair.1 = v ∧ pair.2 = w
 
 def WeightedGraph.well_formed (g : WeightedGraph) : Prop :=
-  ∀ u, u < g.size →
+  ∀ (u : Nat) (hu : u < g.size),
     -- All targets in range
-    (∀ pair, pair ∈ g.adj.getD u #[] → pair.1 < g.size) ∧
+    (∀ pair, pair ∈ g.adj[u] → pair.1 < g.size) ∧
     -- Unique targets (simple graph)
-    (∀ p1 p2, p1 ∈ g.adj.getD u #[] → p2 ∈ g.adj.getD u #[] → p1.1 = p2.1 → p1 = p2)
+    (∀ p1 p2, p1 ∈ g.adj[u] → p2 ∈ g.adj[u] → p1.1 = p2.1 → p1 = p2)
 
 def WeightedGraph.get_edge_weight (g : WeightedGraph) (_ _ : Nat) : Int :=
   -- Since edges are unique, we can abstractly pick the weight
@@ -26,8 +28,8 @@ def WeightedGraph.get_edge_weight (g : WeightedGraph) (_ _ : Nat) : Int :=
 
 def WeightedGraph.is_path (g : WeightedGraph) (p : List Nat) : Prop :=
   p.length > 0 ∧
-  ∀ i, i + 1 < p.length →
-    ∃ w, g.has_edge (p.getD i 0) (p.getD (i + 1) 0) w
+  ∀ (i : Nat) (hi : i + 1 < p.length),
+    ∃ w, g.has_edge (p[i]) (p[i + 1]) w
 
 def WeightedGraph.path_weight (_ : WeightedGraph) (p : List Nat) : Int :=
   match p with
@@ -38,7 +40,7 @@ def WeightedGraph.path_weight (_ : WeightedGraph) (p : List Nat) : Int :=
       -- For simplicity, we assume `has_edge` defines the unique weight
       -- and we sum it up. However, extracting it in logic is annoying.
       -- Let's define path_weight relationally instead.
-      0 
+      0
 
 def WeightedGraph.path_has_weight (g : WeightedGraph) (p : List Nat) (w_total : Int) : Prop :=
   match p with
@@ -87,9 +89,9 @@ def dijkstra_shortest_paths_postcond (graph : WeightedGraph) (start : Nat)
     (result : List (Option Int))
     (_ : dijkstra_shortest_paths_precond graph start) : Prop :=
   -- !benchmark @start postcond
-  result.length = graph.size ∧
-  ∀ v, v < graph.size →
-    match result.getD v none with
+  ∃ (h : result.length = graph.size),
+  ∀ (v : Nat) (hv : v < graph.size),
+    match result[v]'(by grind) with
     | some d => graph.is_shortest_dist start v d
     | none => ¬ ∃ p, graph.is_path p ∧ p.head? = some start ∧ p.getLast? = some v
   -- !benchmark @end postcond
@@ -104,4 +106,6 @@ theorem dijkstra_shortest_paths_postcond_satisfied (graph : WeightedGraph) (star
       (dijkstra_shortest_paths graph start h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end Dijkstra
   -- !benchmark @end proof

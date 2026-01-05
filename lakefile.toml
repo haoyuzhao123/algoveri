@@ -1,0 +1,11 @@
+name = "algoveri"
+version = "0.1.0"
+defaultTargets = ["algoveri_data"]
+
+[[lean_lib]]
+name = "algoveri_data"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.25.0"

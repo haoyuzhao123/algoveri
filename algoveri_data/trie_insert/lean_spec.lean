@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace TrieInsert
+
 inductive Node
 | mk (is_end : Bool) (children : List (Option Node))
 deriving Inhabited
@@ -16,32 +19,25 @@ def children (t : Node) : List (Option Node) :=
 
 end Node
 
--- Helper for enum behavior
-def enumerate {α} (l : List α) : List (Nat × α) :=
-  (List.range l.length).zip l
+-- Safe list access helper
+def list_get_opt {α} (l : List α) (n : Nat) : Option α :=
+  if h : n < l.length then some (l.get ⟨n, h⟩) else none
 
-def join {α} (l : List (List α)) : List α :=
-  l.foldr List.append []
+def contains (t : Node) (key : List Int) : Bool :=
+  match key with
+  | [] => t.is_end
+  | c :: cs =>
+    let children := t.children
+      if c < children.length ∧ c ≥ 0 then
+        match list_get_opt children c.toNat with
+        | some (some child) => contains child cs
+        | _ => false
+      else
+        false
 
-def flatMap {α β} (l : List α) (f : α → List β) : List β :=
-  join (l.map f)
-
--- Using Set theory directly
+-- View as a Set of key sequences (matching Verus/Dafny style)
 def view (t : Node) : Set (List Int) :=
-  let current : Set (List Int) := if t.is_end then {[]} else ∅
-  let child_views : Set (List Int) :=
-    let indexed_children := enumerate t.children
-    indexed_children.foldr (fun (idx_child : Nat × Option Node) acc =>
-      match idx_child.2 with
-      | some child =>
-        let suffix_set := view child
-        let prefixed_set := suffix_set.image (fun suffix => (idx_child.1 : Int) :: suffix)
-        acc ∪ prefixed_set
-      | none => acc
-    ) ∅
-  current ∪ child_views
-termination_by sizeOf t
-decreasing_by sorry
+  {key | contains t key}
 
 def is_empty_node (t : Node) : Bool :=
   !t.is_end ∧ t.children.all Option.isNone
@@ -55,8 +51,8 @@ def well_formed (t : Node) : Prop :=
   | Node.mk _ children =>
     children.length = 256 ∧
     ∀ c ∈ children, match c with
-      | some child => 
-          well_formed child ∧ 
+      | some child =>
+          well_formed child ∧
           !is_empty_node child -- CRITICAL: Match Dafny's pruning invariant
       | none => True
 termination_by sizeOf t
@@ -107,4 +103,6 @@ theorem insert_postcond_satisfied (t : Option Node) (key : List Int)
     insert_postcond t key (insert t key h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end TrieInsert
   -- !benchmark @end proof

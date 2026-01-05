@@ -1,6 +1,9 @@
 import Mathlib
 
 -- Precondition definitions
+
+namespace InsertionSort
+
 @[reducible, simp]
 def insertionSort_precond (v : List Int) : Prop :=
   -- !benchmark @start precond
@@ -31,4 +34,6 @@ theorem insertionSort_postcond_satisfied (v : List Int) (h_precond : insertionSo
     insertionSort_postcond v (insertionSort v h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end InsertionSort
   -- !benchmark @end proof

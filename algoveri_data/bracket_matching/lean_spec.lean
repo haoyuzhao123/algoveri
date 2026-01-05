@@ -1,6 +1,7 @@
-import Mathlib
-
 -- Precondition definitions
+
+namespace BracketMatching
+
 @[reducible, simp]
 def bracket_match_precond (s : Array UInt8) : Prop :=
   -- !benchmark @start precond
@@ -50,4 +51,6 @@ theorem bracket_match_postcond_satisfied
     bracket_match_postcond s (bracket_match s h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end BracketMatching
   -- !benchmark @end proof

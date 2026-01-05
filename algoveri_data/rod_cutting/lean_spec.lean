@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace rod_cutting
+
 def sum_lengths (cuts : List Nat) : Nat :=
   cuts.foldl (· + ·) 0
 
@@ -51,3 +53,5 @@ theorem rod_cutting_postcond_satisfied (n : Nat) (prices : List Nat)
   -- !benchmark @start proof
   sorry
   -- !benchmark @end proof
+
+end rod_cutting

@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace SegmenttreeQuery
+
 inductive Node
 | mk (val : Int) (low high : Int) (left right : Option Node)
 deriving Inhabited
@@ -94,4 +97,6 @@ theorem query_postcond_satisfied (node : Node) (ql qr : Int)
     query_postcond node ql qr (query node ql qr h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end SegmenttreeQuery
   -- !benchmark @end proof

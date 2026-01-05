@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace TernarysearchtreeDelete
+
 inductive Node
 | mk (val : Int) (is_end : Bool) (left mid right : Option Node)
 deriving Inhabited
@@ -109,4 +112,6 @@ theorem delete_postcond_satisfied (t : Option Node) (key : List Int)
     delete_postcond t key (delete t key h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end TernarysearchtreeDelete
   -- !benchmark @end proof

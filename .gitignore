@@ -225,4 +225,4 @@ vericoding-benchmark/
 raw_codes/
 tiktoken_cache/
 prompt*.txt
-Benchark_20260101.json
+Benchark_20260101.json/.lake

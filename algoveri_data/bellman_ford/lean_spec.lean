@@ -1,4 +1,4 @@
-import Mathlib
+namespace BellmanFord
 
 structure WeightedGraph where
   adj : Array (Array (Nat × Int))
@@ -7,15 +7,14 @@ def WeightedGraph.size (g : WeightedGraph) : Nat :=
   g.adj.size
 
 def WeightedGraph.has_edge (g : WeightedGraph) (u v : Nat) (w : Int) : Prop :=
-  u < g.size ∧
-  ∃ pair, pair ∈ g.adj.getD u #[] ∧ pair.1 = v ∧ pair.2 = w
+  ∃ (h : u < g.size) (pair : (Nat × Int)), pair ∈ g.adj[u]'h ∧ pair.1 = v ∧ pair.2 = w
 
 def WeightedGraph.well_formed (g : WeightedGraph) : Prop :=
-  ∀ u, u < g.size →
+  ∀ (u : Nat) (hu : u < g.size),
     -- All targets in range
-    (∀ pair, pair ∈ g.adj.getD u #[] → pair.1 < g.size) ∧
+    (∀ (pair : (Nat × Int)), pair ∈ g.adj[u]'hu → pair.1 < g.size) ∧
     -- Unique targets (simple graph)
-    (∀ p1 p2, p1 ∈ g.adj.getD u #[] → p2 ∈ g.adj.getD u #[] → p1.1 = p2.1 → p1 = p2)
+    (∀ (p1 p2 : (Nat × Int)), p1 ∈ g.adj[u]'hu → p2 ∈ g.adj[u]'hu → p1.1 = p2.1 → p1 = p2)
 
 def WeightedGraph.path_has_weight (g : WeightedGraph) (p : List Nat) (w_total : Int) : Prop :=
   match p with
@@ -75,11 +74,11 @@ def bellman_ford_postcond (graph : WeightedGraph) (start : Nat)
   -- !benchmark @start postcond
   match result with
   | some dists =>
-      dists.length = graph.size ∧
-      ∀ v, v < graph.size →
-        match dists.getD v none with
+      (∃ (h : dists.length = graph.size),
+      ∀ (v : Nat) (hv : v < graph.size),
+        match dists[v]'(by grind) with
         | some d => graph.is_shortest_dist start v d
-        | none => ¬ ∃ p, graph.is_path p ∧ p.head? = some start ∧ p.getLast? = some v
+        | none => ¬ ∃ p, graph.is_path p ∧ p.head? = some start ∧ p.getLast? = some v)
   | none =>
       graph.has_negative_cycle
   -- !benchmark @end postcond
@@ -94,4 +93,6 @@ theorem bellman_ford_postcond_satisfied (graph : WeightedGraph) (start : Nat)
       (bellman_ford graph start h_precond) h_precond := by
   -- !benchmark @start proof
   sorry
+
+end BellmanFord
   -- !benchmark @end proof
