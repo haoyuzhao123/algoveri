@@ -226,3 +226,4 @@ raw_codes/
 tiktoken_cache/
 prompt*.txt
 Benchark_20260101.json/.lake
+.lake/
