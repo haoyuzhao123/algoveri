@@ -35,7 +35,7 @@ verus! {
         ensures
             forall|sub: Seq<int>| #[trigger] is_valid_is(seq@, sub) && sub.len() > 0 ==> sub.len() <= result,
             exists|sub: Seq<int>| is_valid_is(seq@, sub) && sub.len() == result,
-    // <spec>
+    // </spec>
     // <code>
     {
     }
