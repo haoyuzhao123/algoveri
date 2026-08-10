@@ -59,17 +59,20 @@ def is_empty_node (t : Node) : Bool :=
 def is_valid_key (key : List Int) : Prop :=
   ∀ k ∈ key, 0 ≤ k ∧ k < 256
 
-def is_valid_key (key : List Int) : Prop :=
-  ∀ k ∈ key, 0 ≤ k ∧ k < 256
-
-@[reducible, simp]
-def insert_precond (t : Option Node) (key : List Int) : Prop :=
-  -- !benchmark @start precond
-  (match t with
-  | some node => well_formed node ∧ !is_empty_node node
-  | none => True) ∧
-  is_valid_key key -- Added to match Dafny requirement
-  -- !benchmark @end precond
+-- Dafny uses an array of size 256. Here we model it as a list of 256 Option Node.
+def well_formed (t : Node) : Prop :=
+  match t with
+  | Node.mk _ children =>
+    children.length = 256 ∧
+    ∀ child, some child ∈ children →
+      well_formed child ∧
+      !is_empty_node child
+termination_by sizeOf t
+decreasing_by
+  have h : sizeOf (some child) < sizeOf children :=
+    List.sizeOf_lt_of_mem (by assumption)
+  simp at h ⊢
+  omega
 
 -- Precondition definitions
 @[reducible, simp]
