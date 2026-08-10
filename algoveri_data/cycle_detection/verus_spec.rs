@@ -49,7 +49,7 @@ verus! {
     pub open spec fn graph_has_cycle(g: Seq<Seq<int>>) -> bool {
         exists |p: Seq<int>| is_cycle(g, p)
     }
-    /// </preamble>
+    // </preamble>
 
     // Following is the block for potential helper specifications
     // <helpers>
